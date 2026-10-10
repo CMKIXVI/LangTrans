@@ -747,8 +747,13 @@ def convert_syntax(
 					original_content = original_content.replace(
 						part_match, temp_pattern
 					)
-				except ValueError:
-					print(temp_pattern)
+				except ValueError as error:
+					# Keep the conversion failure visible to callers instead of
+					# silently printing the generated replacement and continuing.
+					raise ValueError(
+						"Failed to replace matched syntax part "
+						f"{part_match!r} with generated pattern {temp_pattern!r}"
+					) from error
 	return original_content
 
 
